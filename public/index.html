@@ -152,7 +152,7 @@
         </button>
       </form>
 
-     /* --------------------------------------------------
+/* --------------------------------------------------
    REGISTO DE UTILIZADOR (SEM INSERÇÃO MANUAL)
    -------------------------------------------------- */
 async function handleRegister(e) {
@@ -163,7 +163,6 @@ async function handleRegister(e) {
   const password = document.getElementById('regPassword').value;
   const btn = document.getElementById('registerBtn');
 
-  // Validação simples
   if (!fullName || !email || !password) {
     showToast("Preencha todos os campos obrigatórios.", "error");
     return;
@@ -173,8 +172,6 @@ async function handleRegister(e) {
   btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A criar conta...`;
 
   try {
-    // Apenas chamamos o signUp com os metadados. 
-    // O Trigger no Supabase tratará de criar a linha na tabela 'profiles'.
     const { data: authData, error: authError } = await db.auth.signUp({
       email: email,
       password: password,
@@ -189,7 +186,6 @@ async function handleRegister(e) {
 
     showToast("Conta criada com sucesso! Faça login para continuar.", "success");
 
-    // Limpar formulário e alternar para a aba de login
     document.getElementById('registerForm').reset();
     switchAuthTab('login');
     document.getElementById('loginEmail').value = email;
@@ -201,7 +197,6 @@ async function handleRegister(e) {
     btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Registar Conta`;
   }
 }
-
   <!-- ================= TELA DO PAINEL DE CONTROLO (APÓS LOGIN) ================= -->
   <div id="dashboardScreen" class="hidden min-h-screen flex flex-col justify-between relative z-10">
     
