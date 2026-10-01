@@ -23,6 +23,7 @@
               glass: 'rgba(255, 255, 255, 0.07)',
               glassBorder: 'rgba(255, 255, 255, 0.12)',
               blue: '#0A84FF',
+              purple: '#3A005C',
               green: '#30D158',
               amber: '#FFD60A',
               red: '#FF453A',
@@ -43,6 +44,16 @@
       color: #F2F2F7;
       -webkit-tap-highlight-color: transparent;
       font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+
+    /* Marca d'água de Fundo com o Logótipo RCG */
+    .bg-logo-watermark {
+      background-image: url('RCG.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: min(80vw, 600px);
+      opacity: 0.06;
+      filter: brightness(2) contrast(1.2);
     }
 
     /* Efeito de Vidro Translúcido Estilo iOS */
@@ -93,28 +104,40 @@
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col justify-between selection:bg-ios-blue selection:text-white antialiased">
+<body class="min-h-screen flex flex-col justify-between selection:bg-ios-blue selection:text-white antialiased relative">
 
-  <!-- ================= TELA DE LOGIN ================= -->
-  <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4 py-8 relative overflow-hidden">
-    <!-- Fluid Glow Spheres de Fundo -->
-    <div class="absolute -top-24 -left-24 w-80 h-80 bg-ios-blue/20 rounded-full blur-[100px] pointer-events-none"></div>
-    <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-ios-amber/10 rounded-full blur-[100px] pointer-events-none"></div>
+  <!-- MARCA D'ÁGUA DE FUNDO (LOGÓTIPO RCG) -->
+  <div class="fixed inset-0 bg-logo-watermark pointer-events-none z-0"></div>
+
+  <!-- ================= TELA DE AUTENTICAÇÃO (LOGIN / REGISTO) ================= -->
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4 py-8 relative z-10 overflow-hidden">
+    <!-- Spheres de Brilho de Fundo -->
+    <div class="absolute -top-24 -left-24 w-80 h-80 bg-purple-900/30 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-ios-blue/20 rounded-full blur-[100px] pointer-events-none"></div>
 
     <div class="ios-glass w-full max-w-md rounded-[32px] p-8 shadow-2xl relative z-10 ios-animate">
       
-      <div class="text-center mb-8">
-        <div class="w-16 h-16 rounded-[22px] bg-gradient-to-tr from-ios-blue to-indigo-500 p-[1px] shadow-2xl shadow-ios-blue/30 mx-auto mb-4">
-          <div class="w-full h-full bg-black/80 rounded-[21px] flex items-center justify-center backdrop-blur-md">
-            <span class="font-extrabold text-white text-xl tracking-tighter">RCG</span>
-          </div>
+      <!-- LOGÓTIPO OFICIAL DESTAQUE -->
+      <div class="text-center mb-6">
+        <div class="w-24 h-24 rounded-[26px] bg-white/10 p-3 shadow-2xl backdrop-blur-md border border-white/20 mx-auto mb-3 flex items-center justify-center">
+          <img src="RCG.png" alt="RCG Markets Logo" class="max-h-full max-w-full object-contain filter drop-shadow-md">
         </div>
         <h1 class="font-bold text-white text-2xl tracking-tight">RCG MARKETS</h1>
         <p class="text-[11px] text-ios-amber font-semibold tracking-widest uppercase mt-1">MOZAMBIQUE</p>
-        <p class="text-xs text-zinc-400 mt-2 font-normal">Aceda à plataforma com o seu email e senha</p>
       </div>
 
-      <form onsubmit="handleLogin(event)" class="space-y-4">
+      <!-- ALTERNADOR LOGIN / CADASTRO -->
+      <div class="flex p-1 bg-white/10 rounded-2xl mb-6 backdrop-blur-md border border-white/5">
+        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-semibold rounded-xl text-white bg-white/20 shadow-sm transition-all duration-200">
+          Iniciar Sessão
+        </button>
+        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-semibold rounded-xl text-zinc-400 hover:text-white transition-all duration-200">
+          Criar Conta
+        </button>
+      </div>
+
+      <!-- FORMULÁRIO 1: INICIAR SESSÃO -->
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Email</label>
           <input type="email" id="loginEmail" required placeholder="utilizador@rcgmarkets.co.mz" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
@@ -128,21 +151,40 @@
           <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sessão
         </button>
       </form>
+
+      <!-- FORMULÁRIO 2: NOVO CADASTRO (CLIENTE) -->
+      <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Nome Completo</label>
+          <input type="text" id="regFullName" required placeholder="Ex: João Tembe" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Email</label>
+          <input type="email" id="regEmail" required placeholder="seuemail@exemplo.com" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Palavra-passe</label>
+          <input type="password" id="regPassword" required placeholder="••••••••" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
+        </div>
+        
+        <button type="submit" id="registerBtn" class="ios-btn w-full bg-ios-green hover:bg-emerald-500 text-black font-bold text-sm px-6 py-4 rounded-2xl shadow-lg shadow-ios-green/20 flex items-center justify-center gap-2 mt-6">
+          <i class="fa-solid fa-user-plus"></i> Registar Conta
+        </button>
+      </form>
+
     </div>
   </div>
 
-  <!-- ================= TELA DO PAINEL DE CONTROLO ================= -->
-  <div id="dashboardScreen" class="hidden min-h-screen flex flex-col justify-between">
+  <!-- ================= TELA DO PAINEL DE CONTROLO (APÓS LOGIN) ================= -->
+  <div id="dashboardScreen" class="hidden min-h-screen flex flex-col justify-between relative z-10">
     
-    <!-- CABEÇALHO -->
-    <header class="ios-header sticky top-0 z-50 px-5 py-4">
+    <!-- CABEÇALHO COM O LOGÓTIPO -->
+    <header class="ios-header sticky top-0 z-50 px-5 py-3.5">
       <div class="max-w-5xl mx-auto flex justify-between items-center">
         
         <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-ios-blue to-indigo-500 p-[1px] shadow-md shadow-ios-blue/20">
-            <div class="w-full h-full bg-black/90 rounded-[15px] flex items-center justify-center">
-              <span class="font-extrabold text-white text-xs tracking-tighter">RCG</span>
-            </div>
+          <div class="w-10 h-10 rounded-2xl bg-white/10 p-1.5 border border-white/20 flex items-center justify-center shadow-md">
+            <img src="RCG.png" alt="RCG Logo" class="max-h-full max-w-full object-contain">
           </div>
           <div>
             <div class="flex items-center space-x-1.5">
@@ -253,7 +295,7 @@
     </main>
   </div>
 
-  <!-- NOTIFICAÇÃO CAPSULA ESTILO iOS -->
+  <!-- NOTIFICAÇÃO CÁPSULA ESTILO iOS -->
   <div id="iosToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 transform translate-y-20 opacity-0">
     <div class="ios-glass px-5 py-3 rounded-full flex items-center space-x-3 shadow-2xl border border-white/20">
       <div id="toastIcon" class="w-5 h-5 rounded-full flex items-center justify-center text-xs"></div>
@@ -271,6 +313,26 @@
 
     let currentUser = null;
     let currentUserProfile = null;
+
+    /* ALTERNAR ENTRE LOGIN E CADASTRO */
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const tabLoginBtn = document.getElementById('tabLoginBtn');
+      const tabRegisterBtn = document.getElementById('tabRegisterBtn');
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        tabLoginBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-white bg-white/20 shadow-sm transition-all duration-200";
+        tabRegisterBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-zinc-400 hover:text-white transition-all duration-200";
+      } else {
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+        tabRegisterBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-white bg-white/20 shadow-sm transition-all duration-200";
+        tabLoginBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-zinc-400 hover:text-white transition-all duration-200";
+      }
+    }
 
     /* AUTENTICAÇÃO E LEITURA DA ROLE NA BD */
     async function handleLogin(e) {
@@ -311,7 +373,49 @@
       }
     }
 
-    /* CONFIGURAÇÃO DA INTERFACE SEGUNDO A ROLE LIDA */
+    /* CRIAR NOVA CONTA DE CLIENTE */
+    async function handleRegister(e) {
+      e.preventDefault();
+      
+      const fullName = document.getElementById('regFullName').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+      const btn = document.getElementById('registerBtn');
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A registar...`;
+
+      try {
+        const { data: authData, error: authError } = await db.auth.signUp({ email, password });
+        if (authError) throw authError;
+
+        if (authData.user) {
+          const { error: profileError } = await db
+            .from('profiles')
+            .insert([
+              {
+                id: authData.user.id,
+                full_name: fullName,
+                role: 'CLIENTE',
+                balance: 0.00
+              }
+            ]);
+
+          if (profileError) throw profileError;
+
+          showToast("Conta criada com sucesso! Faça login.", "success");
+          switchAuthTab('login');
+          document.getElementById('loginEmail').value = email;
+        }
+      } catch (err) {
+        showToast(err.message || "Erro ao efetuar o registo.", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Registar Conta`;
+      }
+    }
+
+    /* CONFIGURAÇÃO DA INTERFACE SEGUNDO A ROLE */
     function setupDashboardUI() {
       document.getElementById('loginScreen').classList.add('hidden');
       document.getElementById('dashboardScreen').classList.remove('hidden');
