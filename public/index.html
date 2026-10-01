@@ -1,656 +1,372 @@
 <!DOCTYPE html>
-<html lang="pt-MZ" class="dark">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>RCG MARKETS MOZAMBIQUE - Portal iOS</title>
-  
-  <!-- Tailwind CSS & FontAwesome -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Supabase JS Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            ios: {
-              bg: '#000000',
-              glass: 'rgba(255, 255, 255, 0.07)',
-              glassBorder: 'rgba(255, 255, 255, 0.12)',
-              blue: '#0A84FF',
-              purple: '#3A005C',
-              green: '#30D158',
-              amber: '#FFD60A',
-              red: '#FF453A',
-              card: 'rgba(28, 28, 30, 0.65)'
-            }
-          },
-          fontFamily: {
-            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    body {
-      background-color: #000000;
-      color: #F2F2F7;
-      -webkit-tap-highlight-color: transparent;
-      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-    }
-
-    /* Marca d'água de Fundo com o Logótipo RCG */
-    .bg-logo-watermark {
-      background-image: url('RCG.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: min(80vw, 600px);
-      opacity: 0.06;
-      filter: brightness(2) contrast(1.2);
-    }
-
-    /* Efeito de Vidro Translúcido Estilo iOS */
-    .ios-glass {
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(40px) saturate(210%);
-      -webkit-backdrop-filter: blur(40px) saturate(210%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .ios-header {
-      background: rgba(15, 15, 18, 0.75);
-      backdrop-filter: blur(35px) saturate(200%);
-      -webkit-backdrop-filter: blur(35px) saturate(200%);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    /* Animações e Resposta ao Toque estilo iOS */
-    .ios-btn {
-      transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.15s ease, background-color 0.2s ease;
-    }
-    .ios-btn:active {
-      transform: scale(0.96);
-      opacity: 0.8;
-    }
-
-    @keyframes iosAppear {
-      from { transform: translateY(20px) scale(0.97); opacity: 0; }
-      to { transform: translateY(0) scale(1); opacity: 1; }
-    }
-
-    .ios-animate {
-      animation: iosAppear 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    /* Campos de Entrada Estilo iOS Liquid Focus */
-    .ios-input {
-      background: rgba(118, 118, 128, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .ios-input:focus {
-      border-color: #0A84FF;
-      background: rgba(118, 118, 128, 0.24);
-      box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
-      outline: none;
-    }
-  </style>
-</head>
-
-<body class="min-h-screen flex flex-col justify-between selection:bg-ios-blue selection:text-white antialiased relative">
-
-  <!-- MARCA D'ÁGUA DE FUNDO (LOGÓTIPO RCG) -->
-  <div class="fixed inset-0 bg-logo-watermark pointer-events-none z-0"></div>
-
-  <!-- ================= TELA DE AUTENTICAÇÃO (LOGIN / REGISTO) ================= -->
-  <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4 py-8 relative z-10 overflow-hidden">
-    <!-- Spheres de Brilho de Fundo -->
-    <div class="absolute -top-24 -left-24 w-80 h-80 bg-purple-900/30 rounded-full blur-[100px] pointer-events-none"></div>
-    <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-ios-blue/20 rounded-full blur-[100px] pointer-events-none"></div>
-
-    <div class="ios-glass w-full max-w-md rounded-[32px] p-8 shadow-2xl relative z-10 ios-animate">
-      
-      <!-- LOGÓTIPO OFICIAL DESTAQUE -->
-      <div class="text-center mb-6">
-        <div class="w-24 h-24 rounded-[26px] bg-white/10 p-3 shadow-2xl backdrop-blur-md border border-white/20 mx-auto mb-3 flex items-center justify-center">
-          <img src="RCG.png" alt="RCG Markets Logo" class="max-h-full max-w-full object-contain filter drop-shadow-md">
-        </div>
-        <h1 class="font-bold text-white text-2xl tracking-tight">RCG MARKETS</h1>
-        <p class="text-[11px] text-ios-amber font-semibold tracking-widest uppercase mt-1">MOZAMBIQUE</p>
-      </div>
-
-      <!-- ALTERNADOR LOGIN / CADASTRO -->
-      <div class="flex p-1 bg-white/10 rounded-2xl mb-6 backdrop-blur-md border border-white/5">
-        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-semibold rounded-xl text-white bg-white/20 shadow-sm transition-all duration-200">
-          Iniciar Sessão
-        </button>
-        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-semibold rounded-xl text-zinc-400 hover:text-white transition-all duration-200">
-          Criar Conta
-        </button>
-      </div>
-
-      <!-- FORMULÁRIO 1: INICIAR SESSÃO -->
-      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Email</label>
-          <input type="email" id="loginEmail" required placeholder="utilizador@rcgmarkets.co.mz" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Palavra-passe</label>
-          <input type="password" id="loginPassword" required placeholder="••••••••" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
-        </div>
-        
-        <button type="submit" id="loginBtn" class="ios-btn w-full bg-ios-blue hover:bg-blue-600 text-white font-semibold text-sm px-6 py-4 rounded-2xl shadow-lg shadow-ios-blue/25 flex items-center justify-center gap-2 mt-6">
-          <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sessão
-        </button>
-      </form>
-
-      <!-- Exemplo da estrutura no index.html -->
-
-<script>
-  
-
-  /* --------------------------------------------------
-     REGISTO DE UTILIZADOR
-     -------------------------------------------------- */
-  async function handleRegister(e) {
-    e.preventDefault();
-
-    const fullName = document.getElementById('regFullName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const password = document.getElementById('regPassword').value;
-    const btn = document.getElementById('registerBtn');
-
-    if (!fullName || !email || !password) {
-      showToast("Preencha todos os campos obrigatórios.", "error");
-      return;
-    }
-
-    btn.disabled = true;
-    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A criar conta...`;
-
-    try {
-      const { data: authData, error: authError } = await db.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          data: { 
-            full_name: fullName 
-          }
-        }
-      });
-
-      if (authError) throw authError;
-
-      showToast("Conta criada com sucesso! Faça login para continuar.", "success");
-
-      document.getElementById('registerForm').reset();
-      switchAuthTab('login');
-      document.getElementById('loginEmail').value = email;
-
-    } catch (err) {
-      showToast(err.message || "Erro ao efetuar o registo.", "error");
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Registar Conta`;
-    }
-  }
-</script>
-  <!-- ================= TELA DO PAINEL DE CONTROLO (APÓS LOGIN) ================= -->
-  <div id="dashboardScreen" class="hidden min-h-screen flex flex-col justify-between relative z-10">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCG Markets Mozambique</title>
     
-    <!-- CABEÇALHO COM O LOGÓTIPO -->
-    <header class="ios-header sticky top-0 z-50 px-5 py-3.5">
-      <div class="max-w-5xl mx-auto flex justify-between items-center">
-        
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-2xl bg-white/10 p-1.5 border border-white/20 flex items-center justify-center shadow-md">
-            <img src="RCG.png" alt="RCG Logo" class="max-h-full max-w-full object-contain">
-          </div>
-          <div>
-            <div class="flex items-center space-x-1.5">
-              <h1 class="font-bold text-white text-base tracking-tight leading-none">RCG MARKETS</h1>
-              <span class="text-[9px] bg-ios-amber/20 text-ios-amber font-bold px-1.5 py-0.5 rounded-md border border-ios-amber/30">MOZAMBIQUE</span>
-            </div>
-            <p id="userGreeting" class="text-[11px] text-zinc-400 tracking-tight mt-0.5">A carregar...</p>
-          </div>
-        </div>
+    <!-- CDNs das dependências: FontAwesome e Supabase JS SDK -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        <div class="flex items-center space-x-3">
-          <span id="roleBadge" class="text-[10px] px-3 py-1 rounded-full font-bold uppercase border"></span>
-          <button onclick="handleLogout()" class="ios-btn bg-white/10 hover:bg-white/15 text-zinc-300 hover:text-white px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 border border-white/10">
-            <i class="fa-solid fa-power-off text-ios-red"></i> Sair
-          </button>
-        </div>
-
-      </div>
-    </header>
-
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="max-w-5xl mx-auto w-full px-4 py-6 flex-1 space-y-6">
-
-      <!-- VISÃO DO ADMIN -->
-      <section id="adminView" class="hidden space-y-5 ios-animate">
-        <div class="ios-glass rounded-[28px] p-6 shadow-2xl relative overflow-hidden">
-          <div class="flex items-center space-x-3 mb-6">
-            <div class="w-10 h-10 rounded-2xl bg-ios-blue/20 text-ios-blue flex items-center justify-center font-bold text-base">
-              <i class="fa-solid fa-user-gear"></i>
-            </div>
-            <div>
-              <h2 class="text-base font-bold text-white tracking-tight">Registo de Gestores</h2>
-              <p class="text-xs text-zinc-400">Adicione novos gestores à tabela 'profiles'</p>
-            </div>
-          </div>
-
-          <form onsubmit="handleCreateManager(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Nome Completo</label>
-              <input type="text" id="mgrName" required placeholder="Ex: Mário Tembe" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Email Corporativo</label>
-              <input type="email" id="mgrEmail" required placeholder="gestor@rcgmarkets.co.mz" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Palavra-passe</label>
-              <input type="password" id="mgrPassword" required placeholder="••••••••" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
-            </div>
-            <div class="flex items-end">
-              <button type="submit" class="ios-btn w-full bg-ios-blue hover:bg-blue-600 text-white font-semibold text-xs px-6 py-3.5 rounded-2xl shadow-lg shadow-ios-blue/20 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-plus"></i> Gravar Gestor na BD
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div class="ios-glass rounded-[28px] p-6">
-          <h3 class="font-bold text-white text-sm mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-users text-ios-amber"></i> Gestores Ativos
-          </h3>
-          <div id="managersList" class="space-y-2.5"></div>
-        </div>
-      </section>
-
-      <!-- VISÃO DO GESTOR E ADMIN -->
-      <section id="managerView" class="hidden space-y-5 ios-animate">
-        <div class="ios-glass rounded-[28px] p-6">
-          <h3 class="font-bold text-white text-base mb-1">Pedidos de Levantamento</h3>
-          <p class="text-xs text-zinc-400 mb-4">Aprovações e gestão de taxas da tabela 'withdrawal_requests'.</p>
-          
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead>
-                <tr class="text-zinc-500 border-b border-white/10">
-                  <th class="py-3 px-2">Cliente</th>
-                  <th class="py-3 px-2">Valor Solicitado</th>
-                  <th class="py-3 px-2">Taxa Fixada</th>
-                  <th class="py-3 px-2">Estado</th>
-                  <th class="py-3 px-2 text-right">Ação</th>
-                </tr>
-              </thead>
-              <tbody id="withdrawalsTableBody" class="divide-y divide-white/5"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- VISÃO DO CLIENTE -->
-      <section id="clientView" class="hidden space-y-5 ios-animate">
-        <div class="ios-glass rounded-[28px] p-6">
-          <div class="flex justify-between items-center mb-6">
-            <div>
-              <h2 class="text-base font-bold text-white">Minha Conta</h2>
-              <p class="text-xs text-zinc-400">Resumo de saldo e histórico</p>
-            </div>
-            <div class="text-right">
-              <span class="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold">Saldo Atual</span>
-              <div id="clientBalance" class="text-2xl font-bold font-mono text-ios-green tracking-tight">0.00 MT</div>
-            </div>
-          </div>
-
-          <h3 class="font-bold text-white text-xs mb-3">Histórico de Pedidos</h3>
-          <div id="clientWithdrawalsList" class="space-y-2"></div>
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- NOTIFICAÇÃO CÁPSULA ESTILO iOS -->
-  <div id="iosToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 transform translate-y-20 opacity-0">
-    <div class="ios-glass px-5 py-3 rounded-full flex items-center space-x-3 shadow-2xl border border-white/20">
-      <div id="toastIcon" class="w-5 h-5 rounded-full flex items-center justify-center text-xs"></div>
-      <span id="toastMessage" class="text-xs font-medium text-white tracking-tight"></span>
-    </div>
-  </div>
-
-  <script>
-    /* --------------------------------------------------
-       CONFIGURAÇÃO DO SUPABASE
-       -------------------------------------------------- */
-    const SUPABASE_URL = "https://dzjmwduhzfbudgjwcnzv.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_U6-62cX65asnrJXqVzLv6Q_SGXw_KB6";
-    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    let currentUser = null;
-    let currentUserProfile = null;
-
-    /* ALTERNAR ENTRE LOGIN E CADASTRO */
-    function switchAuthTab(tab) {
-      const loginForm = document.getElementById('loginForm');
-      const registerForm = document.getElementById('registerForm');
-      const tabLoginBtn = document.getElementById('tabLoginBtn');
-      const tabRegisterBtn = document.getElementById('tabRegisterBtn');
-
-      if (tab === 'login') {
-        loginForm.classList.remove('hidden');
-        registerForm.classList.add('hidden');
-        tabLoginBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-white bg-white/20 shadow-sm transition-all duration-200";
-        tabRegisterBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-zinc-400 hover:text-white transition-all duration-200";
-      } else {
-        loginForm.classList.add('hidden');
-        registerForm.classList.remove('hidden');
-        tabRegisterBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-white bg-white/20 shadow-sm transition-all duration-200";
-        tabLoginBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-zinc-400 hover:text-white transition-all duration-200";
-      }
-    }
-
-    /* AUTENTICAÇÃO E LEITURA DA ROLE NA BD */
-    async function handleLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginBtn');
-
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A autenticar...`;
-
-      try {
-        const { data: authData, error: authError } = await db.auth.signInWithPassword({ email, password });
-        if (authError) throw authError;
-
-        currentUser = authData.user;
-
-        const { data: profile, error: profileError } = await db
-          .from('profiles')
-          .select('*')
-          .eq('id', currentUser.id)
-          .single();
-
-        if (profileError || !profile) {
-          throw new Error("Registo de perfil não localizado na tabela 'profiles'.");
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        currentUserProfile = profile;
-        showToast(`Bem-vindo, ${profile.full_name || 'Utilizador'}!`, 'success');
-
-        setupDashboardUI();
-
-      } catch (err) {
-        showToast(err.message || "Credenciais inválidas.", 'error');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Iniciar Sessão`;
-      }
-    }
-
-    /* CRIAR NOVA CONTA DE CLIENTE */
-    async function handleRegister(e) {
-      e.preventDefault();
-      
-      const fullName = document.getElementById('regFullName').value;
-      const email = document.getElementById('regEmail').value;
-      const password = document.getElementById('regPassword').value;
-      const btn = document.getElementById('registerBtn');
-
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A registar...`;
-
-      try {
-        const { data: authData, error: authError } = await db.auth.signUp({ email, password });
-        if (authError) throw authError;
-
-        if (authData.user) {
-          const { error: profileError } = await db
-            .from('profiles')
-            .insert([
-              {
-                id: authData.user.id,
-                full_name: fullName,
-                role: 'CLIENTE',
-                balance: 0.00
-              }
-            ]);
-
-          if (profileError) throw profileError;
-
-          showToast("Conta criada com sucesso! Faça login.", "success");
-          switchAuthTab('login');
-          document.getElementById('loginEmail').value = email;
+        body {
+            background-color: #0d0d0d;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
-      } catch (err) {
-        showToast(err.message || "Erro ao efetuar o registo.", "error");
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Registar Conta`;
-      }
-    }
 
-    /* CONFIGURAÇÃO DA INTERFACE SEGUNDO A ROLE */
-    function setupDashboardUI() {
-      document.getElementById('loginScreen').classList.add('hidden');
-      document.getElementById('dashboardScreen').classList.remove('hidden');
-
-      const role = currentUserProfile.role ? currentUserProfile.role.toUpperCase() : 'CLIENTE';
-      
-      document.getElementById('userGreeting').innerText = `${currentUserProfile.full_name || 'Utilizador'} (${currentUser.email})`;
-      
-      const badge = document.getElementById('roleBadge');
-      badge.innerText = role;
-
-      document.getElementById('adminView').classList.add('hidden');
-      document.getElementById('managerView').classList.add('hidden');
-      document.getElementById('clientView').classList.add('hidden');
-
-      if (role === 'ADMIN') {
-        badge.className = "text-[10px] bg-ios-red/20 text-ios-red border-ios-red/30 px-3 py-1 rounded-full font-bold uppercase";
-        document.getElementById('adminView').classList.remove('hidden');
-        document.getElementById('managerView').classList.remove('hidden');
-        loadManagers();
-        loadWithdrawalRequests();
-      } 
-      else if (role === 'GESTOR') {
-        badge.className = "text-[10px] bg-ios-amber/20 text-ios-amber border-ios-amber/30 px-3 py-1 rounded-full font-bold uppercase";
-        document.getElementById('managerView').classList.remove('hidden');
-        loadWithdrawalRequests();
-      } 
-      else {
-        badge.className = "text-[10px] bg-ios-green/20 text-ios-green border-ios-green/30 px-3 py-1 rounded-full font-bold uppercase";
-        document.getElementById('clientView').classList.remove('hidden');
-        loadClientData();
-      }
-    }
-
-    /* ENCERRAMENTO DE SESSÃO */
-    async function handleLogout() {
-      await db.auth.signOut();
-      currentUser = null;
-      currentUserProfile = null;
-      document.getElementById('dashboardScreen').classList.add('hidden');
-      document.getElementById('loginScreen').classList.remove('hidden');
-      showToast("Sessão terminada.", "info");
-    }
-
-    /* REGISTO DE GESTORES VIA API SERVERLESS */
-    async function handleCreateManager(e) {
-      e.preventDefault();
-
-      const managerData = {
-        fullName: document.getElementById('mgrName').value,
-        email: document.getElementById('mgrEmail').value,
-        password: document.getElementById('mgrPassword').value
-      };
-
-      try {
-        const response = await fetch('/api/create-manager', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            adminUserId: currentUser.id,
-            managerData: managerData
-          })
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          showToast('Gestor gravado na base de dados!', 'success');
-          document.getElementById('mgrName').value = '';
-          document.getElementById('mgrEmail').value = '';
-          document.getElementById('mgrPassword').value = '';
-          loadManagers();
-        } else {
-          showToast(result.error || 'Erro ao criar gestor.', 'error');
+        .auth-container {
+            background-color: #161616;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 440px;
+            padding: 32px 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            text-align: center;
         }
-      } catch (err) {
-        showToast('Erro ao contactar a API Serverless.', 'error');
-      }
-    }
 
-    /* LISTAR GESTORES (PROFILES) */
-    async function loadManagers() {
-      const container = document.getElementById('managersList');
-      const { data } = await db.from('profiles').select('*').eq('role', 'GESTOR');
+        .logo-box {
+            width: 80px;
+            height: 80px;
+            background-color: #222222;
+            border-radius: 16px;
+            margin: 0 auto 16px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #333;
+        }
 
-      if (!data || data.length === 0) {
-        container.innerHTML = `<div class="p-4 text-center text-xs text-zinc-500">Sem gestores registados.</div>`;
-        return;
-      }
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 12px;
+        }
 
-      container.innerHTML = data.map(m => `
-        <div class="ios-glass p-3.5 rounded-2xl flex justify-between items-center border border-white/5">
-          <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 rounded-full bg-ios-blue/20 flex items-center justify-center text-xs font-bold text-ios-blue">
-              ${m.full_name ? m.full_name.charAt(0).toUpperCase() : 'G'}
-            </div>
-            <div>
-              <div class="text-xs font-bold text-white">${m.full_name}</div>
-              <div class="text-[10px] text-zinc-400">ID: ${m.id.substring(0, 8)}...</div>
-            </div>
-          </div>
-          <span class="text-[10px] bg-ios-blue/10 text-ios-blue px-2.5 py-1 rounded-full font-semibold border border-ios-blue/20">
-            ${m.role}
-          </span>
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            color: #eab308;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 24px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            background-color: #222222;
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 0;
+            border: none;
+            background: transparent;
+            color: #888888;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background-color: #333333;
+            color: #ffffff;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: #aaaaaa;
+            margin-bottom: 6px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            background-color: #222222;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #2563eb;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #22c55e;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: #16a34a;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Notificação Toast */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+
+        #toast.error {
+            background-color: #18181b;
+            color: #ffffff;
+            border: 1px solid #3f3f46;
+        }
+
+        #toast.error i {
+            color: #ef4444;
+        }
+
+        #toast.success {
+            background-color: #18181b;
+            color: #ffffff;
+            border: 1px solid #3f3f46;
+        }
+
+        #toast.success i {
+            color: #22c55e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <!-- Logo e Título -->
+        <div class="logo-box">
+            <i class="fa-solid fa-chart-line fa-2x" style="color: #22c55e;"></i>
         </div>
-      `).join('');
-    }
+        <h1>RCG MARKETS</h1>
+        <div class="subtitle">MOZAMBIQUE</div>
 
-    /* LISTAR PEDIDOS DE LEVANTAMENTO (WITHDRAWAL_REQUESTS) */
-    async function loadWithdrawalRequests() {
-      const tbody = document.getElementById('withdrawalsTableBody');
-      const { data } = await db.from('withdrawal_requests').select(`*, profiles(full_name)`).order('created_at', { ascending: false });
+        <!-- Botões de Alternância -->
+        <div class="tab-buttons">
+            <button class="tab-btn active" id="tabLogin" onclick="switchAuthTab('login')">Iniciar Sessão</button>
+            <button class="tab-btn" id="tabRegister" onclick="switchAuthTab('register')">Criar Conta</button>
+        </div>
 
-      if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-zinc-500">Nenhum pedido registado.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = data.map(w => `
-        <tr class="hover:bg-white/5">
-          <td class="py-3 px-2 font-medium text-white">${w.profiles?.full_name || 'Cliente'}</td>
-          <td class="py-3 px-2 font-mono text-ios-green font-bold">${w.amount} MT</td>
-          <td class="py-3 px-2 font-mono text-ios-amber">${w.fee_amount || 0} MT</td>
-          <td class="py-3 px-2">
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
-              w.status === 'APPROVED' ? 'bg-ios-green/20 text-ios-green' : 'bg-ios-amber/20 text-ios-amber'
-            }">${w.status || 'PENDING'}</span>
-          </td>
-          <td class="py-3 px-2 text-right">
-            <button onclick="updateWithdrawalFee('${w.id}')" class="ios-btn bg-ios-blue text-white px-3 py-1 rounded-xl text-[10px] font-bold">
-              Fixar Taxa
+        <!-- Formulário de Login -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Palavra-passe</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-submit" id="loginBtn">
+                <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sessão
             </button>
-          </td>
-        </tr>
-      `).join('');
-    }
+        </form>
 
-    /* APLICAR TAXA DE LEVANTAMENTO */
-    async function updateWithdrawalFee(id) {
-      const fee = prompt("Informe o valor da taxa (MT) a aplicar ao cliente:");
-      if (!fee) return;
+        <!-- Formulário de Registo -->
+        <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+            <div class="form-group">
+                <label for="regFullName">Nome Completo</label>
+                <input type="text" id="regFullName" placeholder="Seu Nome" required>
+            </div>
+            <div class="form-group">
+                <label for="regEmail">Email</label>
+                <input type="email" id="regEmail" placeholder="seu@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="regPassword">Palavra-passe</label>
+                <input type="password" id="regPassword" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-submit" id="registerBtn">
+                <i class="fa-solid fa-user-plus"></i> Registar Conta
+            </button>
+        </form>
+    </div>
 
-      const { error } = await db
-        .from('withdrawal_requests')
-        .update({ fee_amount: parseFloat(fee), status: 'PENDING_FEE' })
-        .eq('id', id);
+    <!-- Elemento para Mensagens Toast -->
+    <div id="toast" class="hidden"></div>
 
-      if (!error) {
-        showToast("Taxa atualizada com sucesso!", "success");
-        loadWithdrawalRequests();
-      } else {
-        showToast("Erro ao gravar taxa.", "error");
-      }
-    }
+    <!-- ================================================== -->
+    <!-- SCRIPT JAVASCRIPT PRINCIPAL                       -->
+    <!-- ================================================== -->
+    <script>
+        // CONFIGURAÇÃO DO SUPABASE
+        const SUPABASE_URL = "https://dzjmwduhzfbudgjwcnzv.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_U6-62cX65asnrJXqVzLv6Q_SGXw_KB6";
+        const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    /* VISUALIZAÇÃO DO CLIENTE */
-    async function loadClientData() {
-      document.getElementById('clientBalance').innerText = `${currentUserProfile.balance || 0.00} MT`;
+        // ALTERNAR ENTRE ABAS DE LOGIN E REGISTO
+        function switchAuthTab(tab) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
 
-      const container = document.getElementById('clientWithdrawalsList');
-      const { data } = await db.from('withdrawal_requests').select('*').eq('user_id', currentUser.id);
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                tabLogin.classList.add('active');
+                tabRegister.classList.remove('active');
+            } else {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                tabLogin.classList.remove('active');
+                tabRegister.classList.add('active');
+            }
+        }
 
-      if (!data || data.length === 0) {
-        container.innerHTML = `<div class="p-4 text-center text-xs text-zinc-500">Nenhum pedido efetuado.</div>`;
-        return;
-      }
+        // MOSTRAR TOAST NOTIFICAÇÃO
+        function showToast(message, type = 'error') {
+            const toast = document.getElementById('toast');
+            const iconClass = type === 'success' ? 'fa-circle-check' : 'fa-circle-xmark';
+            
+            toast.className = type;
+            toast.innerHTML = `<i class="fa-solid ${iconClass}"></i> <span>${message}</span>`;
+            toast.classList.remove('hidden');
 
-      container.innerHTML = data.map(w => `
-        <div class="ios-glass p-3 rounded-2xl flex justify-between items-center text-xs">
-          <div>
-            <div class="font-bold text-white">${w.amount} MT</div>
-            <div class="text-[10px] text-zinc-400">Taxa: ${w.fee_amount || 0} MT</div>
-          </div>
-          <span class="px-2 py-1 rounded-full text-[10px] font-bold ${
-            w.status === 'APPROVED' ? 'bg-ios-green/20 text-ios-green' : 'bg-ios-amber/20 text-ios-amber'
-          }">${w.status || 'PENDING'}</span>
-        </div>
-      `).join('');
-    }
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 4000);
+        }
 
-    /* SISTEMA DE TOAST NOTIFICATION */
-    function showToast(msg, type = 'info') {
-      const toast = document.getElementById('iosToast');
-      const toastMsg = document.getElementById('toastMessage');
-      const toastIcon = document.getElementById('toastIcon');
+        // LÓGICA DE REGISTO (SEM INSERÇÃO MANUAL)
+        async function handleRegister(e) {
+            e.preventDefault();
 
-      toastMsg.innerText = msg;
+            const fullName = document.getElementById('regFullName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const btn = document.getElementById('registerBtn');
 
-      if (type === 'success') {
-        toastIcon.className = "w-5 h-5 rounded-full bg-ios-green text-black flex items-center justify-center text-xs";
-        toastIcon.innerHTML = `<i class="fa-solid fa-check"></i>`;
-      } else if (type === 'error') {
-        toastIcon.className = "w-5 h-5 rounded-full bg-ios-red text-white flex items-center justify-center text-xs";
-        toastIcon.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-      } else {
-        toastIcon.className = "w-5 h-5 rounded-full bg-ios-blue text-white flex items-center justify-center text-xs";
-        toastIcon.innerHTML = `<i class="fa-solid fa-info"></i>`;
-      }
+            if (!fullName || !email || !password) {
+                showToast("Preencha todos os campos obrigatórios.", "error");
+                return;
+            }
 
-      toast.classList.remove('translate-y-20', 'opacity-0');
-      toast.classList.add('translate-y-0', 'opacity-100');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A criar conta...`;
 
-      setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-20', 'opacity-0');
-      }, 3000);
-    }
-  </script>
+            try {
+                // Chama o signUp passando full_name em options.data
+                const { data: authData, error: authError } = await db.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: { full_name: fullName }
+                    }
+                });
+
+                if (authError) throw authError;
+
+                showToast("Conta criada com sucesso! Faça login para continuar.", "success");
+                document.getElementById('registerForm').reset();
+                switchAuthTab('login');
+                document.getElementById('loginEmail').value = email;
+
+            } catch (err) {
+                showToast(err.message || "Erro ao efetuar o registo.", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Registar Conta`;
+            }
+        }
+
+        // LÓGICA DE LOGIN
+        async function handleLogin(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A autenticar...`;
+
+            try {
+                const { data, error } = await db.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) throw error;
+
+                showToast("Sessão iniciada com sucesso!", "success");
+                // Exemplo de redirecionamento futuro:
+                // window.location.href = '/dashboard.html';
+
+            } catch (err) {
+                showToast(err.message || "Email ou palavra-passe incorretos.", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Iniciar Sessão`;
+            }
+        }
+    </script>
 </body>
 </html>
