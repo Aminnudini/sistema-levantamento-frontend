@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>RCG MARKETS MOZAMBIQUE - Gestão Executiva</title>
+  <title>RCG MARKETS MOZAMBIQUE - Portal iOS</title>
   
   <!-- Tailwind CSS & FontAwesome -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -20,12 +20,13 @@
           colors: {
             ios: {
               bg: '#000000',
-              glass: 'rgba(28, 28, 30, 0.72)',
-              border: 'rgba(255, 255, 255, 0.12)',
+              glass: 'rgba(255, 255, 255, 0.07)',
+              glassBorder: 'rgba(255, 255, 255, 0.12)',
               blue: '#0A84FF',
               green: '#30D158',
-              gold: '#FFD60A',
-              red: '#FF453A'
+              amber: '#FFD60A',
+              red: '#FF453A',
+              card: 'rgba(28, 28, 30, 0.65)'
             }
           },
           fontFamily: {
@@ -41,213 +42,323 @@
       background-color: #000000;
       color: #F2F2F7;
       -webkit-tap-highlight-color: transparent;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     }
 
-    /* Efeito iOS Glassmorphism */
+    /* Efeito de Vidro Translúcido Estilo iOS */
     .ios-glass {
-      background: rgba(28, 28, 30, 0.72);
-      backdrop-filter: blur(25px) saturate(190%);
-      -webkit-backdrop-filter: blur(25px) saturate(190%);
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(40px) saturate(210%);
+      -webkit-backdrop-filter: blur(40px) saturate(210%);
       border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
-    .ios-header-glass {
-      background: rgba(18, 18, 18, 0.82);
-      backdrop-filter: blur(30px) saturate(200%);
-      -webkit-backdrop-filter: blur(30px) saturate(200%);
+    .ios-header {
+      background: rgba(15, 15, 18, 0.75);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* Micro-interações e Animações iOS */
+    /* Animações e Resposta ao Toque estilo iOS */
     .ios-btn {
-      transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.18s ease;
+      transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.15s ease, background-color 0.2s ease;
     }
     .ios-btn:active {
       transform: scale(0.96);
-      opacity: 0.85;
+      opacity: 0.8;
     }
 
-    @keyframes iosSlideUp {
-      from { transform: translateY(24px) scale(0.98); opacity: 0; }
+    @keyframes iosAppear {
+      from { transform: translateY(20px) scale(0.97); opacity: 0; }
       to { transform: translateY(0) scale(1); opacity: 1; }
     }
 
     .ios-animate {
-      animation: iosSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: iosAppear 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
+    /* Campos de Entrada Estilo iOS Liquid Focus */
     .ios-input {
-      background: rgba(118, 118, 128, 0.18);
+      background: rgba(118, 118, 128, 0.14);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .ios-input:focus {
-      border-color: #FFD60A;
-      background: rgba(118, 118, 128, 0.28);
+      border-color: #0A84FF;
+      background: rgba(118, 118, 128, 0.24);
+      box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
       outline: none;
     }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
+<body class="min-h-screen flex flex-col justify-between selection:bg-ios-blue selection:text-white antialiased">
 
-  <!-- CABEÇALHO RCG MARKETS MOZAMBIQUE -->
-  <header class="ios-header-glass sticky top-0 z-50 px-4 py-3.5">
-    <div class="max-w-5xl mx-auto flex justify-between items-center">
+  <!-- ================= TELA DE LOGIN ================= -->
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4 py-8 relative overflow-hidden">
+    <!-- Fluid Glow Spheres de Fundo -->
+    <div class="absolute -top-24 -left-24 w-80 h-80 bg-ios-blue/20 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-ios-amber/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <div class="ios-glass w-full max-w-md rounded-[32px] p-8 shadow-2xl relative z-10 ios-animate">
       
-      <!-- LOGO RCG MARKETS -->
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-600 to-yellow-400 p-[1px] shadow-lg shadow-amber-500/20">
-          <div class="w-full h-full bg-black rounded-[15px] flex items-center justify-center">
-            <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-amber-400 to-yellow-200 text-sm tracking-tighter">RCG</span>
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 rounded-[22px] bg-gradient-to-tr from-ios-blue to-indigo-500 p-[1px] shadow-2xl shadow-ios-blue/30 mx-auto mb-4">
+          <div class="w-full h-full bg-black/80 rounded-[21px] flex items-center justify-center backdrop-blur-md">
+            <span class="font-extrabold text-white text-xl tracking-tighter">RCG</span>
           </div>
+        </div>
+        <h1 class="font-bold text-white text-2xl tracking-tight">RCG MARKETS</h1>
+        <p class="text-[11px] text-ios-amber font-semibold tracking-widest uppercase mt-1">MOZAMBIQUE</p>
+        <p class="text-xs text-zinc-400 mt-2 font-normal">Aceda à plataforma com o seu email e senha</p>
+      </div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Email</label>
+          <input type="email" id="loginEmail" required placeholder="utilizador@rcgmarkets.co.mz" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
         </div>
         <div>
-          <div class="flex items-center space-x-1.5">
-            <h1 class="font-bold text-white text-base tracking-tight leading-none">RCG MARKETS</h1>
-            <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded-md border border-amber-500/30">MOZAMBIQUE</span>
-          </div>
-          <p class="text-[10px] text-zinc-400 tracking-tight mt-0.5">Sistema de Gestão de Investimentos</p>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Palavra-passe</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
         </div>
-      </div>
-
-      <!-- SELETOR DE PERFIL -->
-      <div class="flex items-center bg-zinc-900/90 p-1 rounded-2xl border border-white/10">
-        <select id="roleSelector" onchange="switchRole(this.value)" class="bg-transparent text-xs text-zinc-200 font-semibold px-2 py-1 focus:outline-none cursor-pointer">
-          <option value="ADMIN" class="bg-zinc-900 text-white">ADMIN (Master)</option>
-          <option value="GESTOR" class="bg-zinc-900 text-white">GESTOR (Operador)</option>
-          <option value="CLIENTE" class="bg-zinc-900 text-white">CLIENTE</option>
-        </select>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
-  <main class="max-w-5xl mx-auto w-full px-4 py-6 flex-1 space-y-6">
-
-    <!-- SEÇÃO EXCLUSIVA DO ADMIN (CADASTRO DE GESTORES) -->
-    <section id="adminSection" class="ios-animate space-y-5">
-      
-      <div class="ios-glass rounded-3xl p-6 shadow-2xl relative overflow-hidden">
-        <div class="absolute -right-10 -top-10 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div class="flex items-center space-x-3 mb-6">
-          <div class="w-9 h-9 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">
-            <i class="fa-solid fa-user-shield"></i>
-          </div>
-          <div>
-            <h2 class="text-base font-bold text-white tracking-tight">Registar Novo Gestor</h2>
-            <p class="text-xs text-zinc-400">Apenas o ADMIN pode guardar gestores na base de dados.</p>
-          </div>
-        </div>
-
-        <form onsubmit="handleCreateManager(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Nome Completo</label>
-            <input type="text" id="mgrName" required placeholder="Ex: Mário Tembe" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Email Corporativo</label>
-            <input type="email" id="mgrEmail" required placeholder="gestor@rcgmarkets.co.mz" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Palavra-passe de Acesso</label>
-            <input type="password" id="mgrPassword" required placeholder="••••••••" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
-          </div>
-          <div class="flex items-end">
-            <button type="submit" class="ios-btn w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-bold text-xs px-6 py-3.5 rounded-2xl shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2">
-              <i class="fa-solid fa-database"></i> Salvar na Tabela 'profiles'
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- LISTA DE GESTORES (TABELA PROFILES) -->
-      <div class="ios-glass rounded-3xl p-6">
-        <h3 class="font-bold text-white text-sm mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-users text-amber-400"></i> Gestores Registados na RCG MARKETS
-        </h3>
-        <div id="managersList" class="space-y-2.5">
-          <!-- Renderização Dinâmica -->
-        </div>
-      </div>
-
-    </section>
-
-    <!-- SEÇÃO DE GESTÃO DE LEVANTAMENTOS (TABELA WITHDRAWAL_REQUESTS) -->
-    <section id="operationsSection" class="ios-animate hidden space-y-5">
-      <div class="ios-glass rounded-3xl p-6">
-        <h3 class="font-bold text-white text-base mb-1">Pedidos de Levantamento</h3>
-        <p class="text-xs text-zinc-400 mb-4">Gestores e Administradores definem taxas e alteram os estados.</p>
         
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead>
-              <tr class="text-zinc-500 border-b border-white/10">
-                <th class="py-3 px-2">Cliente / Utilizador</th>
-                <th class="py-3 px-2">Valor</th>
-                <th class="py-3 px-2">Taxa Exigida</th>
-                <th class="py-3 px-2">Estado</th>
-                <th class="py-3 px-2 text-right">Ação do Gestor</th>
-              </tr>
-            </thead>
-            <tbody id="withdrawalsTableBody" class="divide-y divide-white/5">
-              <!-- Renderização Dinâmica -->
-            </tbody>
-          </table>
+        <button type="submit" id="loginBtn" class="ios-btn w-full bg-ios-blue hover:bg-blue-600 text-white font-semibold text-sm px-6 py-4 rounded-2xl shadow-lg shadow-ios-blue/25 flex items-center justify-center gap-2 mt-6">
+          <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sessão
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= TELA DO PAINEL DE CONTROLO ================= -->
+  <div id="dashboardScreen" class="hidden min-h-screen flex flex-col justify-between">
+    
+    <!-- CABEÇALHO -->
+    <header class="ios-header sticky top-0 z-50 px-5 py-4">
+      <div class="max-w-5xl mx-auto flex justify-between items-center">
+        
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-ios-blue to-indigo-500 p-[1px] shadow-md shadow-ios-blue/20">
+            <div class="w-full h-full bg-black/90 rounded-[15px] flex items-center justify-center">
+              <span class="font-extrabold text-white text-xs tracking-tighter">RCG</span>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center space-x-1.5">
+              <h1 class="font-bold text-white text-base tracking-tight leading-none">RCG MARKETS</h1>
+              <span class="text-[9px] bg-ios-amber/20 text-ios-amber font-bold px-1.5 py-0.5 rounded-md border border-ios-amber/30">MOZAMBIQUE</span>
+            </div>
+            <p id="userGreeting" class="text-[11px] text-zinc-400 tracking-tight mt-0.5">A carregar...</p>
+          </div>
         </div>
+
+        <div class="flex items-center space-x-3">
+          <span id="roleBadge" class="text-[10px] px-3 py-1 rounded-full font-bold uppercase border"></span>
+          <button onclick="handleLogout()" class="ios-btn bg-white/10 hover:bg-white/15 text-zinc-300 hover:text-white px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 border border-white/10">
+            <i class="fa-solid fa-power-off text-ios-red"></i> Sair
+          </button>
+        </div>
+
       </div>
-    </section>
+    </header>
 
-  </main>
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-6 flex-1 space-y-6">
 
-  <!-- TOAST NOTIFICATION ESTILO iOS CAPSULE -->
+      <!-- VISÃO DO ADMIN -->
+      <section id="adminView" class="hidden space-y-5 ios-animate">
+        <div class="ios-glass rounded-[28px] p-6 shadow-2xl relative overflow-hidden">
+          <div class="flex items-center space-x-3 mb-6">
+            <div class="w-10 h-10 rounded-2xl bg-ios-blue/20 text-ios-blue flex items-center justify-center font-bold text-base">
+              <i class="fa-solid fa-user-gear"></i>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-white tracking-tight">Registo de Gestores</h2>
+              <p class="text-xs text-zinc-400">Adicione novos gestores à tabela 'profiles'</p>
+            </div>
+          </div>
+
+          <form onsubmit="handleCreateManager(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Nome Completo</label>
+              <input type="text" id="mgrName" required placeholder="Ex: Mário Tembe" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Email Corporativo</label>
+              <input type="email" id="mgrEmail" required placeholder="gestor@rcgmarkets.co.mz" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Palavra-passe</label>
+              <input type="password" id="mgrPassword" required placeholder="••••••••" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="ios-btn w-full bg-ios-blue hover:bg-blue-600 text-white font-semibold text-xs px-6 py-3.5 rounded-2xl shadow-lg shadow-ios-blue/20 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-plus"></i> Gravar Gestor na BD
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="ios-glass rounded-[28px] p-6">
+          <h3 class="font-bold text-white text-sm mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-users text-ios-amber"></i> Gestores Ativos
+          </h3>
+          <div id="managersList" class="space-y-2.5"></div>
+        </div>
+      </section>
+
+      <!-- VISÃO DO GESTOR E ADMIN -->
+      <section id="managerView" class="hidden space-y-5 ios-animate">
+        <div class="ios-glass rounded-[28px] p-6">
+          <h3 class="font-bold text-white text-base mb-1">Pedidos de Levantamento</h3>
+          <p class="text-xs text-zinc-400 mb-4">Aprovações e gestão de taxas da tabela 'withdrawal_requests'.</p>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-zinc-500 border-b border-white/10">
+                  <th class="py-3 px-2">Cliente</th>
+                  <th class="py-3 px-2">Valor Solicitado</th>
+                  <th class="py-3 px-2">Taxa Fixada</th>
+                  <th class="py-3 px-2">Estado</th>
+                  <th class="py-3 px-2 text-right">Ação</th>
+                </tr>
+              </thead>
+              <tbody id="withdrawalsTableBody" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VISÃO DO CLIENTE -->
+      <section id="clientView" class="hidden space-y-5 ios-animate">
+        <div class="ios-glass rounded-[28px] p-6">
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <h2 class="text-base font-bold text-white">Minha Conta</h2>
+              <p class="text-xs text-zinc-400">Resumo de saldo e histórico</p>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold">Saldo Atual</span>
+              <div id="clientBalance" class="text-2xl font-bold font-mono text-ios-green tracking-tight">0.00 MT</div>
+            </div>
+          </div>
+
+          <h3 class="font-bold text-white text-xs mb-3">Histórico de Pedidos</h3>
+          <div id="clientWithdrawalsList" class="space-y-2"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- NOTIFICAÇÃO CAPSULA ESTILO iOS -->
   <div id="iosToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 transform translate-y-20 opacity-0">
     <div class="ios-glass px-5 py-3 rounded-full flex items-center space-x-3 shadow-2xl border border-white/20">
       <div id="toastIcon" class="w-5 h-5 rounded-full flex items-center justify-center text-xs"></div>
-      <span id="toastMessage" class="text-xs font-semibold text-white tracking-tight"></span>
+      <span id="toastMessage" class="text-xs font-medium text-white tracking-tight"></span>
     </div>
   </div>
 
   <script>
     /* --------------------------------------------------
-       CONFIGURAÇÃO DO SUPABASE (SUAS CREDENCIAIS)
+       CONFIGURAÇÃO DO SUPABASE
        -------------------------------------------------- */
     const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";
     const SUPABASE_ANON_KEY = "SUA-CHAVE-ANONIMA";
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let currentRole = 'ADMIN';
-    let currentAdminUserId = 'COLOQUE_SEU_UUID_DE_ADMIN_AQUI'; // ID do perfil Admin logado
+    let currentUser = null;
+    let currentUserProfile = null;
 
-    /* TROCAR DE VISUALIZAÇÃO */
-    function switchRole(role) {
-      currentRole = role;
-      showToast(`A visualizar como: ${role}`, 'info');
-      
-      const adminSec = document.getElementById('adminSection');
-      const opsSec = document.getElementById('operationsSection');
+    /* AUTENTICAÇÃO E LEITURA DA ROLE NA BD */
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('loginBtn');
 
-      if (role === 'ADMIN') {
-        adminSec.classList.remove('hidden');
-        opsSec.classList.add('hidden');
-        loadManagers();
-      } else {
-        adminSec.classList.add('hidden');
-        opsSec.classList.remove('hidden');
-        loadWithdrawalRequests();
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A autenticar...`;
+
+      try {
+        const { data: authData, error: authError } = await db.auth.signInWithPassword({ email, password });
+        if (authError) throw authError;
+
+        currentUser = authData.user;
+
+        const { data: profile, error: profileError } = await db
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (profileError || !profile) {
+          throw new Error("Registo de perfil não localizado na tabela 'profiles'.");
+        }
+
+        currentUserProfile = profile;
+        showToast(`Bem-vindo, ${profile.full_name || 'Utilizador'}!`, 'success');
+
+        setupDashboardUI();
+
+      } catch (err) {
+        showToast(err.message || "Credenciais inválidas.", 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Iniciar Sessão`;
       }
     }
 
-    /* 1. CRIAR GESTOR NA ROTA SERVERLESS E SALVAR NA PROFILES */
+    /* CONFIGURAÇÃO DA INTERFACE SEGUNDO A ROLE LIDA */
+    function setupDashboardUI() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboardScreen').classList.remove('hidden');
+
+      const role = currentUserProfile.role ? currentUserProfile.role.toUpperCase() : 'CLIENTE';
+      
+      document.getElementById('userGreeting').innerText = `${currentUserProfile.full_name || 'Utilizador'} (${currentUser.email})`;
+      
+      const badge = document.getElementById('roleBadge');
+      badge.innerText = role;
+
+      document.getElementById('adminView').classList.add('hidden');
+      document.getElementById('managerView').classList.add('hidden');
+      document.getElementById('clientView').classList.add('hidden');
+
+      if (role === 'ADMIN') {
+        badge.className = "text-[10px] bg-ios-red/20 text-ios-red border-ios-red/30 px-3 py-1 rounded-full font-bold uppercase";
+        document.getElementById('adminView').classList.remove('hidden');
+        document.getElementById('managerView').classList.remove('hidden');
+        loadManagers();
+        loadWithdrawalRequests();
+      } 
+      else if (role === 'GESTOR') {
+        badge.className = "text-[10px] bg-ios-amber/20 text-ios-amber border-ios-amber/30 px-3 py-1 rounded-full font-bold uppercase";
+        document.getElementById('managerView').classList.remove('hidden');
+        loadWithdrawalRequests();
+      } 
+      else {
+        badge.className = "text-[10px] bg-ios-green/20 text-ios-green border-ios-green/30 px-3 py-1 rounded-full font-bold uppercase";
+        document.getElementById('clientView').classList.remove('hidden');
+        loadClientData();
+      }
+    }
+
+    /* ENCERRAMENTO DE SESSÃO */
+    async function handleLogout() {
+      await db.auth.signOut();
+      currentUser = null;
+      currentUserProfile = null;
+      document.getElementById('dashboardScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      showToast("Sessão terminada.", "info");
+    }
+
+    /* REGISTO DE GESTORES VIA API SERVERLESS */
     async function handleCreateManager(e) {
       e.preventDefault();
-
-      if (currentRole !== 'ADMIN') {
-        showToast('Apenas o ADMIN pode cadastrar novos gestores!', 'error');
-        return;
-      }
 
       const managerData = {
         fullName: document.getElementById('mgrName').value,
@@ -260,7 +371,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            adminUserId: currentAdminUserId,
+            adminUserId: currentUser.id,
             managerData: managerData
           })
         });
@@ -268,86 +379,69 @@
         const result = await response.json();
 
         if (response.ok) {
-          showToast('Gestor guardado com sucesso no banco!', 'success');
+          showToast('Gestor gravado na base de dados!', 'success');
           document.getElementById('mgrName').value = '';
           document.getElementById('mgrEmail').value = '';
           document.getElementById('mgrPassword').value = '';
           loadManagers();
         } else {
-          showToast(result.error || 'Erro ao gravar gestor.', 'error');
+          showToast(result.error || 'Erro ao criar gestor.', 'error');
         }
       } catch (err) {
-        showToast('Erro de ligação à API.', 'error');
+        showToast('Erro ao contactar a API Serverless.', 'error');
       }
     }
 
-    /* 2. CARREGAR GESTORES DA SUA TABELA 'PROFILES' */
+    /* LISTAR GESTORES (PROFILES) */
     async function loadManagers() {
       const container = document.getElementById('managersList');
-      
-      const { data, error } = await db
-        .from('profiles')
-        .select('*')
-        .eq('role', 'GESTOR')
-        .order('created_at', { ascending: false });
+      const { data } = await db.from('profiles').select('*').eq('role', 'GESTOR');
 
-      if (error || !data || data.length === 0) {
-        container.innerHTML = `<div class="p-4 text-center text-xs text-zinc-500">Nenhum gestor registado na tabela 'profiles'.</div>`;
+      if (!data || data.length === 0) {
+        container.innerHTML = `<div class="p-4 text-center text-xs text-zinc-500">Sem gestores registados.</div>`;
         return;
       }
 
       container.innerHTML = data.map(m => `
         <div class="ios-glass p-3.5 rounded-2xl flex justify-between items-center border border-white/5">
           <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-xs font-bold text-amber-400">
+            <div class="w-8 h-8 rounded-full bg-ios-blue/20 flex items-center justify-center text-xs font-bold text-ios-blue">
               ${m.full_name ? m.full_name.charAt(0).toUpperCase() : 'G'}
             </div>
             <div>
-              <div class="text-xs font-bold text-white">${m.full_name || 'Gestor RCG'}</div>
-              <div class="text-[10px] text-zinc-400">UUID: ${m.id.substring(0, 8)}...</div>
+              <div class="text-xs font-bold text-white">${m.full_name}</div>
+              <div class="text-[10px] text-zinc-400">ID: ${m.id.substring(0, 8)}...</div>
             </div>
           </div>
-          <span class="text-[10px] bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full font-semibold border border-amber-500/20">
+          <span class="text-[10px] bg-ios-blue/10 text-ios-blue px-2.5 py-1 rounded-full font-semibold border border-ios-blue/20">
             ${m.role}
           </span>
         </div>
       `).join('');
     }
 
-    /* 3. CARREGAR PEDIDOS DA SUA TABELA 'WITHDRAWAL_REQUESTS' */
+    /* LISTAR PEDIDOS DE LEVANTAMENTO (WITHDRAWAL_REQUESTS) */
     async function loadWithdrawalRequests() {
       const tbody = document.getElementById('withdrawalsTableBody');
+      const { data } = await db.from('withdrawal_requests').select(`*, profiles(full_name)`).order('created_at', { ascending: false });
 
-      const { data, error } = await db
-        .from('withdrawal_requests')
-        .select(`
-          id,
-          user_id,
-          amount,
-          fee_amount,
-          status,
-          destination_details,
-          profiles ( full_name )
-        `)
-        .order('created_at', { ascending: false });
-
-      if (error || !data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-zinc-500">Nenhum pedido de levantamento encontrado.</td></tr>`;
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-zinc-500">Nenhum pedido registado.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = data.map(w => `
         <tr class="hover:bg-white/5">
           <td class="py-3 px-2 font-medium text-white">${w.profiles?.full_name || 'Cliente'}</td>
-          <td class="py-3 px-2 font-mono text-emerald-400 font-bold">${w.amount} MT</td>
-          <td class="py-3 px-2 font-mono text-amber-400">${w.fee_amount || 0} MT</td>
+          <td class="py-3 px-2 font-mono text-ios-green font-bold">${w.amount} MT</td>
+          <td class="py-3 px-2 font-mono text-ios-amber">${w.fee_amount || 0} MT</td>
           <td class="py-3 px-2">
             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
-              w.status === 'APPROVED' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'
+              w.status === 'APPROVED' ? 'bg-ios-green/20 text-ios-green' : 'bg-ios-amber/20 text-ios-amber'
             }">${w.status || 'PENDING'}</span>
           </td>
           <td class="py-3 px-2 text-right">
-            <button onclick="updateWithdrawalFee('${w.id}')" class="ios-btn bg-amber-500 text-black px-2.5 py-1 rounded-xl text-[10px] font-bold">
+            <button onclick="updateWithdrawalFee('${w.id}')" class="ios-btn bg-ios-blue text-white px-3 py-1 rounded-xl text-[10px] font-bold">
               Fixar Taxa
             </button>
           </td>
@@ -355,7 +449,7 @@
       `).join('');
     }
 
-    /* FIXAR TAXA DE LEVANTAMENTO (ATUALIZAR TABELA) */
+    /* APLICAR TAXA DE LEVANTAMENTO */
     async function updateWithdrawalFee(id) {
       const fee = prompt("Informe o valor da taxa (MT) a aplicar ao cliente:");
       if (!fee) return;
@@ -369,11 +463,36 @@
         showToast("Taxa atualizada com sucesso!", "success");
         loadWithdrawalRequests();
       } else {
-        showToast("Erro ao atualizar taxa.", "error");
+        showToast("Erro ao gravar taxa.", "error");
       }
     }
 
-    /* TOAST CAPSULE ESTILO iOS */
+    /* VISUALIZAÇÃO DO CLIENTE */
+    async function loadClientData() {
+      document.getElementById('clientBalance').innerText = `${currentUserProfile.balance || 0.00} MT`;
+
+      const container = document.getElementById('clientWithdrawalsList');
+      const { data } = await db.from('withdrawal_requests').select('*').eq('user_id', currentUser.id);
+
+      if (!data || data.length === 0) {
+        container.innerHTML = `<div class="p-4 text-center text-xs text-zinc-500">Nenhum pedido efetuado.</div>`;
+        return;
+      }
+
+      container.innerHTML = data.map(w => `
+        <div class="ios-glass p-3 rounded-2xl flex justify-between items-center text-xs">
+          <div>
+            <div class="font-bold text-white">${w.amount} MT</div>
+            <div class="text-[10px] text-zinc-400">Taxa: ${w.fee_amount || 0} MT</div>
+          </div>
+          <span class="px-2 py-1 rounded-full text-[10px] font-bold ${
+            w.status === 'APPROVED' ? 'bg-ios-green/20 text-ios-green' : 'bg-ios-amber/20 text-ios-amber'
+          }">${w.status || 'PENDING'}</span>
+        </div>
+      `).join('');
+    }
+
+    /* SISTEMA DE TOAST NOTIFICATION */
     function showToast(msg, type = 'info') {
       const toast = document.getElementById('iosToast');
       const toastMsg = document.getElementById('toastMessage');
@@ -400,10 +519,6 @@
         toast.classList.add('translate-y-20', 'opacity-0');
       }, 3000);
     }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      loadManagers();
-    });
   </script>
 </body>
 </html>
