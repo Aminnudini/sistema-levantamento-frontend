@@ -152,51 +152,63 @@
         </button>
       </form>
 
-/* --------------------------------------------------
-   REGISTO DE UTILIZADOR (SEM INSERÇÃO MANUAL)
-   -------------------------------------------------- */
-async function handleRegister(e) {
-  e.preventDefault();
+      <!-- Exemplo da estrutura no index.html -->
 
-  const fullName = document.getElementById('regFullName').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const password = document.getElementById('regPassword').value;
-  const btn = document.getElementById('registerBtn');
+<script>
+  /* --------------------------------------------------
+     CONFIGURAÇÃO DO SUPABASE
+     -------------------------------------------------- */
+  const SUPABASE_URL = "https://dzjmwduhzfbudgjwcnzv.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_U6-62cX65asnrJXqVzLv6Q_SGXw_KB6";
 
-  if (!fullName || !email || !password) {
-    showToast("Preencha todos os campos obrigatórios.", "error");
-    return;
-  }
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  btn.disabled = true;
-  btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A criar conta...`;
+  /* --------------------------------------------------
+     REGISTO DE UTILIZADOR
+     -------------------------------------------------- */
+  async function handleRegister(e) {
+    e.preventDefault();
 
-  try {
-    const { data: authData, error: authError } = await db.auth.signUp({
-      email: email,
-      password: password,
-      options: {
-        data: { 
-          full_name: fullName 
+    const fullName = document.getElementById('regFullName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const btn = document.getElementById('registerBtn');
+
+    if (!fullName || !email || !password) {
+      showToast("Preencha todos os campos obrigatórios.", "error");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A criar conta...`;
+
+    try {
+      const { data: authData, error: authError } = await db.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: { 
+            full_name: fullName 
+          }
         }
-      }
-    });
+      });
 
-    if (authError) throw authError;
+      if (authError) throw authError;
 
-    showToast("Conta criada com sucesso! Faça login para continuar.", "success");
+      showToast("Conta criada com sucesso! Faça login para continuar.", "success");
 
-    document.getElementById('registerForm').reset();
-    switchAuthTab('login');
-    document.getElementById('loginEmail').value = email;
+      document.getElementById('registerForm').reset();
+      switchAuthTab('login');
+      document.getElementById('loginEmail').value = email;
 
-  } catch (err) {
-    showToast(err.message || "Erro ao efetuar o registo.", "error");
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Registar Conta`;
+    } catch (err) {
+      showToast(err.message || "Erro ao efetuar o registo.", "error");
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Registar Conta`;
+    }
   }
-}
+</script>
   <!-- ================= TELA DO PAINEL DE CONTROLO (APÓS LOGIN) ================= -->
   <div id="dashboardScreen" class="hidden min-h-screen flex flex-col justify-between relative z-10">
     
