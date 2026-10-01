@@ -389,7 +389,38 @@
       if (role === 'ADMIN' || role === 'GESTOR') loadAllPaymentRequests();
       if (role === 'CLIENTE') loadClientData();
     }
+// Carregar a lista de gestores para o Admin
+async function loadManagers() {
+  try {
+    const container = document.getElementById('managersList');
+    if (!container) return; // Se não houver container no HTML, ignora
 
+    const { data, error } = await db
+      .from('profiles')
+      .select('*')
+      .eq('role', 'GESTOR')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `<p class="text-xs text-zinc-500 p-2">Nenhum gestor registado.</p>`;
+      return;
+    }
+
+    container.innerHTML = data.map(m => `
+      <div class="ios-glass p-3 rounded-2xl flex justify-between items-center text-xs mb-2">
+        <div>
+          <span class="font-bold text-white block">${m.full_name || 'Gestor'}</span>
+          <span class="text-[10px] text-zinc-400">ID: ${m.id}</span>
+        </div>
+        <span class="text-[10px] bg-ios-blue/20 text-ios-blue border border-ios-blue/30 px-2 py-0.5 rounded-full font-bold uppercase">Gestor</span>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error("Erro ao carregar gestores:", err);
+  }
+}
     async function handlePaymentSubmit(e, type) {
       e.preventDefault();
       const isDep = type === 'DEPOSIT';
