@@ -152,28 +152,55 @@
         </button>
       </form>
 
-      <!-- FORMULÁRIO 2: NOVO CADASTRO (CLIENTE) -->
-      <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-4 hidden">
-        <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Nome Completo</label>
-          <input type="text" id="regFullName" required placeholder="Ex: João Tembe" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Email</label>
-          <input type="email" id="regEmail" required placeholder="seuemail@exemplo.com" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Palavra-passe</label>
-          <input type="password" id="regPassword" required placeholder="••••••••" class="ios-input w-full rounded-2xl px-4 py-3.5 text-sm text-white placeholder-zinc-600">
-        </div>
-        
-        <button type="submit" id="registerBtn" class="ios-btn w-full bg-ios-green hover:bg-emerald-500 text-black font-bold text-sm px-6 py-4 rounded-2xl shadow-lg shadow-ios-green/20 flex items-center justify-center gap-2 mt-6">
-          <i class="fa-solid fa-user-plus"></i> Registar Conta
-        </button>
-      </form>
+     /* --------------------------------------------------
+   REGISTO DE UTILIZADOR (SEM INSERÇÃO MANUAL)
+   -------------------------------------------------- */
+async function handleRegister(e) {
+  e.preventDefault();
 
-    </div>
-  </div>
+  const fullName = document.getElementById('regFullName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const btn = document.getElementById('registerBtn');
+
+  // Validação simples
+  if (!fullName || !email || !password) {
+    showToast("Preencha todos os campos obrigatórios.", "error");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A criar conta...`;
+
+  try {
+    // Apenas chamamos o signUp com os metadados. 
+    // O Trigger no Supabase tratará de criar a linha na tabela 'profiles'.
+    const { data: authData, error: authError } = await db.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: { 
+          full_name: fullName 
+        }
+      }
+    });
+
+    if (authError) throw authError;
+
+    showToast("Conta criada com sucesso! Faça login para continuar.", "success");
+
+    // Limpar formulário e alternar para a aba de login
+    document.getElementById('registerForm').reset();
+    switchAuthTab('login');
+    document.getElementById('loginEmail').value = email;
+
+  } catch (err) {
+    showToast(err.message || "Erro ao efetuar o registo.", "error");
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Registar Conta`;
+  }
+}
 
   <!-- ================= TELA DO PAINEL DE CONTROLO (APÓS LOGIN) ================= -->
   <div id="dashboardScreen" class="hidden min-h-screen flex flex-col justify-between relative z-10">
