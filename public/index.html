@@ -46,16 +46,6 @@
       font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     }
 
-    /* Marca d'água de Fundo com o Logótipo RCG */
-    .bg-logo-watermark {
-      background-image: url('RCG.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: min(80vw, 600px);
-      opacity: 0.06;
-      filter: brightness(2) contrast(1.2);
-    }
-
     /* Efeito de Vidro Translúcido Estilo iOS */
     .ios-glass {
       background: rgba(255, 255, 255, 0.06);
@@ -89,7 +79,6 @@
       animation: iosAppear 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    /* Campos de Entrada Estilo iOS Liquid Focus */
     .ios-input {
       background: rgba(118, 118, 128, 0.14);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -106,21 +95,13 @@
 
 <body class="min-h-screen flex flex-col justify-between selection:bg-ios-blue selection:text-white antialiased relative">
 
-  <!-- MARCA D'ÁGUA DE FUNDO (LOGÓTIPO RCG) -->
-  <div class="fixed inset-0 bg-logo-watermark pointer-events-none z-0"></div>
-
   <!-- ================= TELA DE AUTENTICAÇÃO (LOGIN / REGISTO) ================= -->
   <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4 py-8 relative z-10 overflow-hidden">
-    <!-- Spheres de Brilho de Fundo -->
-    <div class="absolute -top-24 -left-24 w-80 h-80 bg-purple-900/30 rounded-full blur-[100px] pointer-events-none"></div>
-    <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-ios-blue/20 rounded-full blur-[100px] pointer-events-none"></div>
-
     <div class="ios-glass w-full max-w-md rounded-[32px] p-8 shadow-2xl relative z-10 ios-animate">
       
-      <!-- LOGÓTIPO OFICIAL DESTAQUE -->
       <div class="text-center mb-6">
-        <div class="w-24 h-24 rounded-[26px] bg-white/10 p-3 shadow-2xl backdrop-blur-md border border-white/20 mx-auto mb-3 flex items-center justify-center">
-          <img src="RCG.png" alt="RCG Markets Logo" class="max-h-full max-w-full object-contain filter drop-shadow-md">
+        <div class="w-20 h-20 rounded-[22px] bg-white/10 p-3 shadow-2xl backdrop-blur-md border border-white/20 mx-auto mb-3 flex items-center justify-center">
+          <i class="fa-solid fa-chart-line text-3xl text-ios-green"></i>
         </div>
         <h1 class="font-bold text-white text-2xl tracking-tight">RCG MARKETS</h1>
         <p class="text-[11px] text-ios-amber font-semibold tracking-widest uppercase mt-1">MOZAMBIQUE</p>
@@ -178,13 +159,12 @@
   <!-- ================= TELA DO PAINEL DE CONTROLO (APÓS LOGIN) ================= -->
   <div id="dashboardScreen" class="hidden min-h-screen flex flex-col justify-between relative z-10">
     
-    <!-- CABEÇALHO COM O LOGÓTIPO -->
+    <!-- CABEÇALHO -->
     <header class="ios-header sticky top-0 z-50 px-5 py-3.5">
       <div class="max-w-5xl mx-auto flex justify-between items-center">
-        
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-2xl bg-white/10 p-1.5 border border-white/20 flex items-center justify-center shadow-md">
-            <img src="RCG.png" alt="RCG Logo" class="max-h-full max-w-full object-contain">
+            <i class="fa-solid fa-chart-line text-ios-green"></i>
           </div>
           <div>
             <div class="flex items-center space-x-1.5">
@@ -201,7 +181,6 @@
             <i class="fa-solid fa-power-off text-ios-red"></i> Sair
           </button>
         </div>
-
       </div>
     </header>
 
@@ -210,42 +189,31 @@
 
       <!-- VISÃO DO ADMIN -->
       <section id="adminView" class="hidden space-y-5 ios-animate">
-        <div class="ios-glass rounded-[28px] p-6 shadow-2xl relative overflow-hidden">
-          <div class="flex items-center space-x-3 mb-6">
-            <div class="w-10 h-10 rounded-2xl bg-ios-blue/20 text-ios-blue flex items-center justify-center font-bold text-base">
-              <i class="fa-solid fa-user-gear"></i>
-            </div>
-            <div>
-              <h2 class="text-base font-bold text-white tracking-tight">Registo de Gestores</h2>
-              <p class="text-xs text-zinc-400">Adicione novos gestores à tabela 'profiles'</p>
-            </div>
-          </div>
-
+        <div class="ios-glass rounded-[28px] p-6 shadow-2xl">
+          <h2 class="text-base font-bold text-white mb-4"><i class="fa-solid fa-user-gear text-ios-blue"></i> Registo de Gestores</h2>
           <form onsubmit="handleCreateManager(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Nome Completo</label>
-              <input type="text" id="mgrName" required placeholder="Ex: Mário Tembe" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
+              <label class="block text-xs font-medium text-zinc-400 mb-1">Nome Completo</label>
+              <input type="text" id="mgrName" required placeholder="Ex: Mário Tembe" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white">
             </div>
             <div>
-              <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Email Corporativo</label>
-              <input type="email" id="mgrEmail" required placeholder="gestor@rcgmarkets.co.mz" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
+              <label class="block text-xs font-medium text-zinc-400 mb-1">Email Corporativo</label>
+              <input type="email" id="mgrEmail" required placeholder="gestor@rcgmarkets.co.mz" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white">
             </div>
             <div>
-              <label class="block text-xs font-medium text-zinc-400 mb-1.5 ml-1">Palavra-passe</label>
-              <input type="password" id="mgrPassword" required placeholder="••••••••" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white placeholder-zinc-600">
+              <label class="block text-xs font-medium text-zinc-400 mb-1">Palavra-passe</label>
+              <input type="password" id="mgrPassword" required placeholder="••••••••" class="ios-input w-full rounded-2xl px-4 py-3 text-sm text-white">
             </div>
             <div class="flex items-end">
-              <button type="submit" class="ios-btn w-full bg-ios-blue hover:bg-blue-600 text-white font-semibold text-xs px-6 py-3.5 rounded-2xl shadow-lg shadow-ios-blue/20 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-plus"></i> Gravar Gestor na BD
+              <button type="submit" class="ios-btn w-full bg-ios-blue hover:bg-blue-600 text-white font-semibold text-xs px-6 py-3.5 rounded-2xl shadow-lg">
+                <i class="fa-solid fa-plus"></i> Registar Gestor
               </button>
             </div>
           </form>
         </div>
 
         <div class="ios-glass rounded-[28px] p-6">
-          <h3 class="font-bold text-white text-sm mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-users text-ios-amber"></i> Gestores Ativos
-          </h3>
+          <h3 class="font-bold text-white text-sm mb-4"><i class="fa-solid fa-users text-ios-amber"></i> Gestores Ativos</h3>
           <div id="managersList" class="space-y-2.5"></div>
         </div>
       </section>
@@ -253,21 +221,22 @@
       <!-- VISÃO DO GESTOR E ADMIN -->
       <section id="managerView" class="hidden space-y-5 ios-animate">
         <div class="ios-glass rounded-[28px] p-6">
-          <h3 class="font-bold text-white text-base mb-1">Pedidos de Levantamento</h3>
-          <p class="text-xs text-zinc-400 mb-4">Aprovações e gestão de taxas da tabela 'withdrawal_requests'.</p>
+          <h3 class="font-bold text-white text-base mb-1">Gestão de Pedidos Financeiros</h3>
+          <p class="text-xs text-zinc-400 mb-4">Aprovação de Depósitos e Levantamentos da tabela 'payment_requests'</p>
           
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
               <thead>
                 <tr class="text-zinc-500 border-b border-white/10">
                   <th class="py-3 px-2">Cliente</th>
-                  <th class="py-3 px-2">Valor Solicitado</th>
-                  <th class="py-3 px-2">Taxa Fixada</th>
+                  <th class="py-3 px-2">Tipo</th>
+                  <th class="py-3 px-2">Método / Telefone</th>
+                  <th class="py-3 px-2">Valor</th>
                   <th class="py-3 px-2">Estado</th>
                   <th class="py-3 px-2 text-right">Ação</th>
                 </tr>
               </thead>
-              <tbody id="withdrawalsTableBody" class="divide-y divide-white/5"></tbody>
+              <tbody id="paymentRequestsTableBody" class="divide-y divide-white/5"></tbody>
             </table>
           </div>
         </div>
@@ -282,20 +251,60 @@
               <p class="text-xs text-zinc-400">Resumo de saldo e histórico</p>
             </div>
             <div class="text-right">
-              <span class="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold">Saldo Atual</span>
-              <div id="clientBalance" class="text-2xl font-bold font-mono text-ios-green tracking-tight">0.00 MT</div>
+              <span class="text-[10px] text-zinc-400 uppercase font-semibold">Saldo Atual</span>
+              <div id="clientBalance" class="text-2xl font-bold font-mono text-ios-green">0.00 MT</div>
             </div>
           </div>
 
+          <!-- Botões de Ação para Depósito e Levantamento -->
+          <div class="grid grid-cols-2 gap-3 mb-6">
+            <button onclick="toggleModal('depositModal')" class="ios-btn bg-ios-green text-black font-bold p-3 rounded-2xl text-xs flex items-center justify-center gap-2">
+              <i class="fa-solid fa-arrow-down"></i> Depositar
+            </button>
+            <button onclick="toggleModal('withdrawModal')" class="ios-btn bg-ios-blue text-white font-bold p-3 rounded-2xl text-xs flex items-center justify-center gap-2">
+              <i class="fa-solid fa-arrow-up"></i> Levantamento
+            </button>
+          </div>
+
+          <!-- Formulário de Depósito Modal/Accordion -->
+          <div id="depositModal" class="hidden ios-glass p-4 rounded-2xl mb-4 border border-ios-green/30">
+            <h4 class="font-bold text-xs text-ios-green mb-3">Efetuar Depósito (M-Pesa / e-Mola / Banco)</h4>
+            <form onsubmit="handlePaymentSubmit(event, 'DEPOSIT')" class="space-y-3">
+              <select id="depMethod" class="ios-input w-full rounded-xl p-2.5 text-xs text-white">
+                <option value="M-Pesa">M-Pesa</option>
+                <option value="e-Mola">e-Mola</option>
+                <option value="Millennium BIM">Millennium BIM</option>
+              </select>
+              <input type="number" id="depAmount" placeholder="Valor (MT)" required min="100" class="ios-input w-full rounded-xl p-2.5 text-xs text-white">
+              <input type="text" id="depPhone" placeholder="Número de Telefone / Conta" required class="ios-input w-full rounded-xl p-2.5 text-xs text-white">
+              <button type="submit" class="w-full bg-ios-green text-black font-bold py-2.5 rounded-xl text-xs">Enviar Comprovativo</button>
+            </form>
+          </div>
+
+          <!-- Formulário de Levantamento Modal/Accordion -->
+          <div id="withdrawModal" class="hidden ios-glass p-4 rounded-2xl mb-4 border border-ios-blue/30">
+            <h4 class="font-bold text-xs text-ios-blue mb-3">Solicitar Levantamento</h4>
+            <form onsubmit="handlePaymentSubmit(event, 'WITHDRAWAL')" class="space-y-3">
+              <select id="withMethod" class="ios-input w-full rounded-xl p-2.5 text-xs text-white">
+                <option value="M-Pesa">M-Pesa</option>
+                <option value="e-Mola">e-Mola</option>
+                <option value="Banco">Conta Bancária</option>
+              </select>
+              <input type="number" id="withAmount" placeholder="Valor (MT)" required min="100" class="ios-input w-full rounded-xl p-2.5 text-xs text-white">
+              <input type="text" id="withPhone" placeholder="Número de Telefone / NIB" required class="ios-input w-full rounded-xl p-2.5 text-xs text-white">
+              <button type="submit" class="w-full bg-ios-blue text-white font-bold py-2.5 rounded-xl text-xs">Confirmar Levantamento</button>
+            </form>
+          </div>
+
           <h3 class="font-bold text-white text-xs mb-3">Histórico de Pedidos</h3>
-          <div id="clientWithdrawalsList" class="space-y-2"></div>
+          <div id="clientRequestsList" class="space-y-2"></div>
         </div>
       </section>
 
     </main>
   </div>
 
-  <!-- NOTIFICAÇÃO CÁPSULA ESTILO iOS -->
+  <!-- NOTIFICAÇÃO TOAST -->
   <div id="iosToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 transform translate-y-20 opacity-0">
     <div class="ios-glass px-5 py-3 rounded-full flex items-center space-x-3 shadow-2xl border border-white/20">
       <div id="toastIcon" class="w-5 h-5 rounded-full flex items-center justify-center text-xs"></div>
@@ -304,9 +313,6 @@
   </div>
 
   <script>
-    /* --------------------------------------------------
-       CONFIGURAÇÃO DO SUPABASE
-       -------------------------------------------------- */
     const SUPABASE_URL = "https://dzjmwduhzfbudgjwcnzv.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_U6-62cX65asnrJXqVzLv6Q_SGXw_KB6";
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -314,35 +320,15 @@
     let currentUser = null;
     let currentUserProfile = null;
 
-    /* ALTERNAR ENTRE LOGIN E CADASTRO */
     function switchAuthTab(tab) {
-      const loginForm = document.getElementById('loginForm');
-      const registerForm = document.getElementById('registerForm');
-      const tabLoginBtn = document.getElementById('tabLoginBtn');
-      const tabRegisterBtn = document.getElementById('tabRegisterBtn');
-
-      if (tab === 'login') {
-        loginForm.classList.remove('hidden');
-        registerForm.classList.add('hidden');
-        tabLoginBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-white bg-white/20 shadow-sm transition-all duration-200";
-        tabRegisterBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-zinc-400 hover:text-white transition-all duration-200";
-      } else {
-        loginForm.classList.add('hidden');
-        registerForm.classList.remove('hidden');
-        tabRegisterBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-white bg-white/20 shadow-sm transition-all duration-200";
-        tabLoginBtn.className = "flex-1 py-2 text-xs font-semibold rounded-xl text-zinc-400 hover:text-white transition-all duration-200";
-      }
+      document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+      document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
     }
 
-    /* AUTENTICAÇÃO E LEITURA DA ROLE NA BD */
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginBtn');
-
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A autenticar...`;
 
       try {
         const { data: authData, error: authError } = await db.auth.signInWithPassword({ email, password });
@@ -356,268 +342,152 @@
           .eq('id', currentUser.id)
           .single();
 
-        if (profileError || !profile) {
-          throw new Error("Registo de perfil não localizado na tabela 'profiles'.");
-        }
+        if (profileError || !profile) throw new Error("Perfil não encontrado na tabela 'profiles'.");
 
         currentUserProfile = profile;
         showToast(`Bem-vindo, ${profile.full_name || 'Utilizador'}!`, 'success');
-
         setupDashboardUI();
 
       } catch (err) {
         showToast(err.message || "Credenciais inválidas.", 'error');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Iniciar Sessão`;
       }
     }
 
-    /* CRIAR NOVA CONTA DE CLIENTE */
     async function handleRegister(e) {
       e.preventDefault();
-      
       const fullName = document.getElementById('regFullName').value;
       const email = document.getElementById('regEmail').value;
       const password = document.getElementById('regPassword').value;
-      const btn = document.getElementById('registerBtn');
-
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A registar...`;
 
       try {
         const { data: authData, error: authError } = await db.auth.signUp({ email, password });
         if (authError) throw authError;
 
         if (authData.user) {
-          const { error: profileError } = await db
-            .from('profiles')
-            .insert([
-              {
-                id: authData.user.id,
-                full_name: fullName,
-                role: 'CLIENTE',
-                balance: 0.00
-              }
-            ]);
-
-          if (profileError) throw profileError;
-
-          showToast("Conta criada com sucesso! Faça login.", "success");
+          await db.from('profiles').insert([{ id: authData.user.id, full_name: fullName, role: 'CLIENTE', balance: 0.00 }]);
+          showToast("Conta criada com sucesso!", "success");
           switchAuthTab('login');
-          document.getElementById('loginEmail').value = email;
         }
       } catch (err) {
-        showToast(err.message || "Erro ao efetuar o registo.", "error");
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Registar Conta`;
+        showToast(err.message || "Erro no registo.", "error");
       }
     }
 
-    /* CONFIGURAÇÃO DA INTERFACE SEGUNDO A ROLE */
     function setupDashboardUI() {
       document.getElementById('loginScreen').classList.add('hidden');
       document.getElementById('dashboardScreen').classList.remove('hidden');
 
-      const role = currentUserProfile.role ? currentUserProfile.role.toUpperCase() : 'CLIENTE';
-      
-      document.getElementById('userGreeting').innerText = `${currentUserProfile.full_name || 'Utilizador'} (${currentUser.email})`;
-      
-      const badge = document.getElementById('roleBadge');
-      badge.innerText = role;
+      const role = (currentUserProfile.role || 'CLIENTE').toUpperCase();
+      document.getElementById('userGreeting').innerText = `${currentUserProfile.full_name} (${currentUser.email})`;
+      document.getElementById('roleBadge').innerText = role;
 
-      document.getElementById('adminView').classList.add('hidden');
-      document.getElementById('managerView').classList.add('hidden');
-      document.getElementById('clientView').classList.add('hidden');
+      document.getElementById('adminView').classList.toggle('hidden', role !== 'ADMIN');
+      document.getElementById('managerView').classList.toggle('hidden', role !== 'ADMIN' && role !== 'GESTOR');
+      document.getElementById('clientView').classList.toggle('hidden', role !== 'CLIENTE');
 
-      if (role === 'ADMIN') {
-        badge.className = "text-[10px] bg-ios-red/20 text-ios-red border-ios-red/30 px-3 py-1 rounded-full font-bold uppercase";
-        document.getElementById('adminView').classList.remove('hidden');
-        document.getElementById('managerView').classList.remove('hidden');
-        loadManagers();
-        loadWithdrawalRequests();
-      } 
-      else if (role === 'GESTOR') {
-        badge.className = "text-[10px] bg-ios-amber/20 text-ios-amber border-ios-amber/30 px-3 py-1 rounded-full font-bold uppercase";
-        document.getElementById('managerView').classList.remove('hidden');
-        loadWithdrawalRequests();
-      } 
-      else {
-        badge.className = "text-[10px] bg-ios-green/20 text-ios-green border-ios-green/30 px-3 py-1 rounded-full font-bold uppercase";
-        document.getElementById('clientView').classList.remove('hidden');
-        loadClientData();
-      }
+      if (role === 'ADMIN') loadManagers();
+      if (role === 'ADMIN' || role === 'GESTOR') loadAllPaymentRequests();
+      if (role === 'CLIENTE') loadClientData();
     }
 
-    /* ENCERRAMENTO DE SESSÃO */
-    async function handleLogout() {
-      await db.auth.signOut();
-      currentUser = null;
-      currentUserProfile = null;
-      document.getElementById('dashboardScreen').classList.add('hidden');
-      document.getElementById('loginScreen').classList.remove('hidden');
-      showToast("Sessão terminada.", "info");
-    }
-
-    /* REGISTO DE GESTORES VIA API SERVERLESS */
-    async function handleCreateManager(e) {
+    async function handlePaymentSubmit(e, type) {
       e.preventDefault();
+      const isDep = type === 'DEPOSIT';
+      const method = document.getElementById(isDep ? 'depMethod' : 'withMethod').value;
+      const amount = parseFloat(document.getElementById(isDep ? 'depAmount' : 'withAmount').value);
+      const phone = document.getElementById(isDep ? 'depPhone' : 'withPhone').value;
 
-      const managerData = {
-        fullName: document.getElementById('mgrName').value,
-        email: document.getElementById('mgrEmail').value,
-        password: document.getElementById('mgrPassword').value
-      };
+      const { error } = await db.from('payment_requests').insert({
+        user_id: currentUser.id,
+        request_type: type,
+        amount: amount,
+        payment_method: method,
+        phone_number: phone,
+        status: 'PENDING'
+      });
 
-      try {
-        const response = await fetch('/api/create-manager', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            adminUserId: currentUser.id,
-            managerData: managerData
-          })
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          showToast('Gestor gravado na base de dados!', 'success');
-          document.getElementById('mgrName').value = '';
-          document.getElementById('mgrEmail').value = '';
-          document.getElementById('mgrPassword').value = '';
-          loadManagers();
-        } else {
-          showToast(result.error || 'Erro ao criar gestor.', 'error');
-        }
-      } catch (err) {
-        showToast('Erro ao contactar a API Serverless.', 'error');
+      if (!error) {
+        showToast("Pedido submetido com sucesso!", "success");
+        toggleModal(isDep ? 'depositModal' : 'withdrawModal');
+        loadClientData();
+      } else {
+        showToast(error.message, "error");
       }
     }
 
-    /* LISTAR GESTORES (PROFILES) */
-    async function loadManagers() {
-      const container = document.getElementById('managersList');
-      const { data } = await db.from('profiles').select('*').eq('role', 'GESTOR');
+    async function loadAllPaymentRequests() {
+      const tbody = document.getElementById('paymentRequestsTableBody');
+      const { data } = await db.from('payment_requests').select('*, profiles(full_name)').order('created_at', { ascending: false });
 
       if (!data || data.length === 0) {
-        container.innerHTML = `<div class="p-4 text-center text-xs text-zinc-500">Sem gestores registados.</div>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-zinc-500">Sem pedidos registados.</td></tr>`;
         return;
       }
 
-      container.innerHTML = data.map(m => `
-        <div class="ios-glass p-3.5 rounded-2xl flex justify-between items-center border border-white/5">
-          <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 rounded-full bg-ios-blue/20 flex items-center justify-center text-xs font-bold text-ios-blue">
-              ${m.full_name ? m.full_name.charAt(0).toUpperCase() : 'G'}
-            </div>
-            <div>
-              <div class="text-xs font-bold text-white">${m.full_name}</div>
-              <div class="text-[10px] text-zinc-400">ID: ${m.id.substring(0, 8)}...</div>
-            </div>
-          </div>
-          <span class="text-[10px] bg-ios-blue/10 text-ios-blue px-2.5 py-1 rounded-full font-semibold border border-ios-blue/20">
-            ${m.role}
-          </span>
-        </div>
-      `).join('');
-    }
-
-    /* LISTAR PEDIDOS DE LEVANTAMENTO (WITHDRAWAL_REQUESTS) */
-    async function loadWithdrawalRequests() {
-      const tbody = document.getElementById('withdrawalsTableBody');
-      const { data } = await db.from('withdrawal_requests').select(`*, profiles(full_name)`).order('created_at', { ascending: false });
-
-      if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-zinc-500">Nenhum pedido registado.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = data.map(w => `
+      tbody.innerHTML = data.map(r => `
         <tr class="hover:bg-white/5">
-          <td class="py-3 px-2 font-medium text-white">${w.profiles?.full_name || 'Cliente'}</td>
-          <td class="py-3 px-2 font-mono text-ios-green font-bold">${w.amount} MT</td>
-          <td class="py-3 px-2 font-mono text-ios-amber">${w.fee_amount || 0} MT</td>
-          <td class="py-3 px-2">
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
-              w.status === 'APPROVED' ? 'bg-ios-green/20 text-ios-green' : 'bg-ios-amber/20 text-ios-amber'
-            }">${w.status || 'PENDING'}</span>
-          </td>
+          <td class="py-3 px-2 text-white font-medium">${r.profiles?.full_name || 'Cliente'}</td>
+          <td class="py-3 px-2 font-bold ${r.request_type === 'DEPOSIT' ? 'text-ios-green' : 'text-ios-blue'}">${r.request_type}</td>
+          <td class="py-3 px-2 text-zinc-400">${r.payment_method} (${r.phone_number})</td>
+          <td class="py-3 px-2 font-mono font-bold">${r.amount} MT</td>
+          <td class="py-3 px-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${r.status === 'APPROVED' ? 'bg-ios-green/20 text-ios-green' : 'bg-ios-amber/20 text-ios-amber'}">${r.status}</span></td>
           <td class="py-3 px-2 text-right">
-            <button onclick="updateWithdrawalFee('${w.id}')" class="ios-btn bg-ios-blue text-white px-3 py-1 rounded-xl text-[10px] font-bold">
-              Fixar Taxa
-            </button>
+            ${r.status === 'PENDING' ? `<button onclick="approveRequest('${r.id}', '${r.user_id}', ${r.amount}, '${r.request_type}')" class="ios-btn bg-ios-green text-black px-2.5 py-1 rounded-lg text-[10px] font-bold">Aprovar</button>` : ''}
           </td>
         </tr>
       `).join('');
     }
 
-    /* APLICAR TAXA DE LEVANTAMENTO */
-    async function updateWithdrawalFee(id) {
-      const fee = prompt("Informe o valor da taxa (MT) a aplicar ao cliente:");
-      if (!fee) return;
-
-      const { error } = await db
-        .from('withdrawal_requests')
-        .update({ fee_amount: parseFloat(fee), status: 'PENDING_FEE' })
-        .eq('id', id);
-
+    async function approveRequest(id, userId, amount, type) {
+      const { error } = await db.from('payment_requests').update({ status: 'APPROVED' }).eq('id', id);
       if (!error) {
-        showToast("Taxa atualizada com sucesso!", "success");
-        loadWithdrawalRequests();
-      } else {
-        showToast("Erro ao gravar taxa.", "error");
+        // Atualiza saldo do cliente no perfil
+        const { data: p } = await db.from('profiles').select('balance').eq('id', userId).single();
+        const currentBal = p ? p.balance : 0;
+        const newBal = type === 'DEPOSIT' ? currentBal + amount : currentBal - amount;
+        
+        await db.from('profiles').update({ balance: newBal }).eq('id', userId);
+        showToast("Pedido Aprovado e Saldo Atualizado!", "success");
+        loadAllPaymentRequests();
       }
     }
 
-    /* VISUALIZAÇÃO DO CLIENTE */
     async function loadClientData() {
-      document.getElementById('clientBalance').innerText = `${currentUserProfile.balance || 0.00} MT`;
+      document.getElementById('clientBalance').innerText = `${parseFloat(currentUserProfile.balance || 0).toFixed(2)} MT`;
+      const { data } = await db.from('payment_requests').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
 
-      const container = document.getElementById('clientWithdrawalsList');
-      const { data } = await db.from('withdrawal_requests').select('*').eq('user_id', currentUser.id);
-
+      const container = document.getElementById('clientRequestsList');
       if (!data || data.length === 0) {
         container.innerHTML = `<div class="p-4 text-center text-xs text-zinc-500">Nenhum pedido efetuado.</div>`;
         return;
       }
 
-      container.innerHTML = data.map(w => `
+      container.innerHTML = data.map(r => `
         <div class="ios-glass p-3 rounded-2xl flex justify-between items-center text-xs">
           <div>
-            <div class="font-bold text-white">${w.amount} MT</div>
-            <div class="text-[10px] text-zinc-400">Taxa: ${w.fee_amount || 0} MT</div>
+            <div class="font-bold text-white">${r.request_type === 'DEPOSIT' ? 'Depósito' : 'Levantamento'} - ${r.amount} MT</div>
+            <div class="text-[10px] text-zinc-400">${r.payment_method} (${r.phone_number})</div>
           </div>
-          <span class="px-2 py-1 rounded-full text-[10px] font-bold ${
-            w.status === 'APPROVED' ? 'bg-ios-green/20 text-ios-green' : 'bg-ios-amber/20 text-ios-amber'
-          }">${w.status || 'PENDING'}</span>
+          <span class="px-2 py-1 rounded-full text-[10px] font-bold ${r.status === 'APPROVED' ? 'bg-ios-green/20 text-ios-green' : 'bg-ios-amber/20 text-ios-amber'}">${r.status}</span>
         </div>
       `).join('');
     }
 
-    /* SISTEMA DE TOAST NOTIFICATION */
+    function toggleModal(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('hidden');
+    }
+
+    async function handleLogout() {
+      await db.auth.signOut();
+      window.location.reload();
+    }
+
     function showToast(msg, type = 'info') {
       const toast = document.getElementById('iosToast');
-      const toastMsg = document.getElementById('toastMessage');
-      const toastIcon = document.getElementById('toastIcon');
-
-      toastMsg.innerText = msg;
-
-      if (type === 'success') {
-        toastIcon.className = "w-5 h-5 rounded-full bg-ios-green text-black flex items-center justify-center text-xs";
-        toastIcon.innerHTML = `<i class="fa-solid fa-check"></i>`;
-      } else if (type === 'error') {
-        toastIcon.className = "w-5 h-5 rounded-full bg-ios-red text-white flex items-center justify-center text-xs";
-        toastIcon.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-      } else {
-        toastIcon.className = "w-5 h-5 rounded-full bg-ios-blue text-white flex items-center justify-center text-xs";
-        toastIcon.innerHTML = `<i class="fa-solid fa-info"></i>`;
-      }
-
+      document.getElementById('toastMessage').innerText = msg;
       toast.classList.remove('translate-y-20', 'opacity-0');
       toast.classList.add('translate-y-0', 'opacity-100');
-
       setTimeout(() => {
         toast.classList.remove('translate-y-0', 'opacity-100');
         toast.classList.add('translate-y-20', 'opacity-0');
